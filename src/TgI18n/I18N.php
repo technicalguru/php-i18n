@@ -83,7 +83,7 @@ class I18N {
             self::$i18n = array();
             foreach ($files as $file) {
                 if (($file != NULL) && file_exists($file)) {
-                    self::$i18n = include_once ($file);
+                    self::$i18n = include($file);
                 }
             }
         }
@@ -93,6 +93,20 @@ class I18N {
         return $key;
     }
 
+    /**
+     * Merges in new localizations, eventually overriding existing ones.
+     * @param string $file - the localization file to merge in
+     */
+    public static function addI18nFile($file) {
+        if (($file != NULL) && file_exists($file)) {
+            if (self::$i18n == NULL) {
+                self::$i18n = include($file);
+            } else {
+                self::$i18n = array_merge(self::$i18n, include($file));
+            }
+        }
+    }
+    
     /**
      * Return the value with given key.
      *
