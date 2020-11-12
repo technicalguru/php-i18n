@@ -107,7 +107,21 @@ class I18N {
             }
         }
     }
-
+ 
+    /**
+     * Merges in new localizations, eventually overriding existing ones.
+     * @param array $values - the localization values to merge in
+     */
+    public static function addValues(array $values) {
+        if ($values != NULL) {
+            if (self::$i18n == NULL) {
+                self::$i18n = $values;
+            } else {
+                self::$i18n = array_merge(self::$i18n, $values);
+            }
+        }
+    }
+    
     /**
      * Return the value with given key.
      *
