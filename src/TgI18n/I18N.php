@@ -83,7 +83,8 @@ class I18N {
             self::$i18n = array();
             foreach ($files as $file) {
                 if (($file != NULL) && file_exists($file)) {
-                    self::$i18n = include_once ($file);
+                    self::$i18n = include($file);
+                    break;
                 }
             }
         }
@@ -93,6 +94,42 @@ class I18N {
         return $key;
     }
 
+    /**
+     * Merges in new localizations, eventually overriding existing ones.
+     * @param string $file - the localization file to merge in
+     * @param boolean $override - whether existing values shall be overriden (TRUE by default)
+     */
+    public static function addI18nFile($file, $override = TRUE) {
+        if (($file != NULL) && file_exists($file)) {
+            self::addValues(include($file), $override);
+        }
+    }
+ 
+    /**
+     * Merges in new localizations, eventually overriding existing ones.
+     * @param array $values - the localization values to merge in
+     * @param boolean $override - whether existing values shall be overriden (TRUE by default)
+     */
+    public static function addValues(array $values, $override = TRUE) {
+        if ($values != NULL) {
+            if (self::$i18n == NULL) {
+                self::$i18n = $values;
+            } else {
+                foreach ($values AS $key => $i18n) {
+                    if (isset(self::$i18n[$key])) {
+                        foreach ($i18n AS $lang => $value) {
+                            if ($override || !isset(self::$i18n[$key][$lang])) {
+                                self::$i18n[$key][$lang] = $value;
+                            }
+                        }
+                    } else {
+                        self::$i18n[$key] = $i18n;
+                    }
+                }
+            }
+        }
+    }
+    
     /**
      * Return the value with given key.
      *
