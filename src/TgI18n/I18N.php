@@ -84,6 +84,7 @@ class I18N {
             foreach ($files as $file) {
                 if (($file != NULL) && file_exists($file)) {
                     self::$i18n = include($file);
+                    break;
                 }
             }
         }
@@ -106,7 +107,7 @@ class I18N {
             }
         }
     }
-    
+
     /**
      * Return the value with given key.
      *
