@@ -70,29 +70,37 @@ class I18N {
      */
     public static function getValues($key) {
         if (self::$i18n == NULL) {
-            $files = array(
-                self::$i18nFile
-            );
-            if (isset($_SERVER['CONTEXT_DOCUMENT_ROOT']) && $_SERVER['CONTEXT_DOCUMENT_ROOT']) {
-                $files[] = $_SERVER['CONTEXT_DOCUMENT_ROOT'] . '/i18n.php';
-            }
-            if (isset($_SERVER['DOCUMENT_ROOT']) && $_SERVER['DOCUMENT_ROOT']) {
-                $files[] = $_SERVER['DOCUMENT_ROOT'] . '/i18n.php';
-            }
-            $files[] = dirname($_SERVER['SCRIPT_FILENAME']) . '/i18n.php';
-            self::$i18n = array();
-            foreach ($files as $file) {
-                if (($file != NULL) && file_exists($file)) {
-                    self::$i18n = include($file);
-                    break;
-                }
-            }
+			self::doAutoload();
         }
         if (array_key_exists($key, self::$i18n)) {
             return self::$i18n[$key];
         }
         return $key;
     }
+
+	/**
+	 * Auto-loads all available localization files from documenet root and context document root
+	 * and from script directory.
+	 */
+	protected static function doAutoload() {
+		$files = array(
+			self::$i18nFile
+		);
+		if (isset($_SERVER['CONTEXT_DOCUMENT_ROOT']) && $_SERVER['CONTEXT_DOCUMENT_ROOT']) {
+			$files[] = $_SERVER['CONTEXT_DOCUMENT_ROOT'] . '/i18n.php';
+		}
+		if (isset($_SERVER['DOCUMENT_ROOT']) && $_SERVER['DOCUMENT_ROOT']) {
+			$files[] = $_SERVER['DOCUMENT_ROOT'] . '/i18n.php';
+		}
+		$files[] = dirname($_SERVER['SCRIPT_FILENAME']) . '/i18n.php';
+		self::$i18n = array();
+		foreach ($files as $file) {
+			if (($file != NULL) && file_exists($file)) {
+				self::$i18n = include($file);
+				break;
+			}
+		}
+	}
 
     /**
      * Merges in new localizations, eventually overriding existing ones.
@@ -113,20 +121,19 @@ class I18N {
     public static function addValues(array $values, $override = TRUE) {
         if ($values != NULL) {
             if (self::$i18n == NULL) {
-                self::$i18n = $values;
-            } else {
-                foreach ($values AS $key => $i18n) {
-                    if (isset(self::$i18n[$key])) {
-                        foreach ($i18n AS $lang => $value) {
-                            if ($override || !isset(self::$i18n[$key][$lang])) {
-                                self::$i18n[$key][$lang] = $value;
-                            }
-                        }
-                    } else {
-                        self::$i18n[$key] = $i18n;
-                    }
-                }
-            }
+                self::doAutoload();
+			}
+			foreach ($values AS $key => $i18n) {
+				if (isset(self::$i18n[$key])) {
+					foreach ($i18n AS $lang => $value) {
+						if ($override || !isset(self::$i18n[$key][$lang])) {
+							self::$i18n[$key][$lang] = $value;
+						}
+					}
+				} else {
+					self::$i18n[$key] = $i18n;
+				}
+			}
         }
     }
     
