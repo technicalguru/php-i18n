@@ -10,6 +10,11 @@ class I18N {
     public static $defaultLangCode = 'en';
 
     /**
+     * The fallback language code when translation is not available in original language.
+     */
+    public static $fallbackLangCode = 'en';
+
+    /**
      * The main localization file.
      */
     public static $i18nFile = NULL;
@@ -48,7 +53,9 @@ class I18N {
         if (is_array($values)) {
             if (array_key_exists($langCode, $values)) {
                 return $values[$langCode];
-            }
+            } else if (array_key_exists(self::$fallbackLangCode, $values)) {
+                return $values[self::$fallbackLangCode];
+			}
             return array_shift($values);
         }
         return $key;
@@ -159,9 +166,10 @@ class I18N {
      * <p>Use with care. Usually it makes no sense to use this function.</p>
      */
     public static function reset() {
-        self::$defaultLangCode = 'en';
-        self::$i18nFile        = NULL;
-        self::$i18n            = NULL;
+        self::$defaultLangCode  = 'en';
+        self::$fallbackLangCode = 'en';
+        self::$i18nFile         = NULL;
+        self::$i18n             = NULL;
     }
     
 }
