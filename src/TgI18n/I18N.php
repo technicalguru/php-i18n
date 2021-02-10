@@ -54,7 +54,7 @@ class I18N {
             if (array_key_exists($langCode, $values)) {
                 return $values[$langCode];
             } else {
-				foreach (self::$fallbackLangCodes AS $fallback)) {
+				foreach (self::$fallbackLangCodes AS $fallback) {
 					if (array_key_exists($fallback, $values)) {
 		                return $values[$fallback];
 					}
