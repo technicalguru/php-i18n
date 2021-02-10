@@ -12,7 +12,7 @@ class I18N {
     /**
      * The fallback language code when translation is not available in original language.
      */
-    public static $fallbackLangCode = 'en';
+    public static $fallbackLangCodes = array('en');
 
     /**
      * The main localization file.
@@ -53,8 +53,12 @@ class I18N {
         if (is_array($values)) {
             if (array_key_exists($langCode, $values)) {
                 return $values[$langCode];
-            } else if (array_key_exists(self::$fallbackLangCode, $values)) {
-                return $values[self::$fallbackLangCode];
+            } else {
+				foreach (self::$fallbackLangCodes AS $fallback)) {
+					if (array_key_exists($fallback, $values)) {
+		                return $values[$fallback];
+					}
+				}
 			}
             return array_shift($values);
         }
