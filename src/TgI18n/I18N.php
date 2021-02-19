@@ -25,6 +25,24 @@ class I18N {
     protected static $i18n = NULL;
 
     /**
+     * Perform an sprintf with localized value of given key and parameters.
+     *
+     * @param string $key
+     *            - the language key
+     * @param string $langCode
+     *            - the language code to be used for translation, default language when not given.
+     * @param string $params
+     *            - the params to the sprintf function
+     * @return string the sprintf-ed value for the language 
+     */
+    public static function sprintf($key, $langCode, ...$params) {
+		$value = self::_($key, $langCode);
+		if ($value == NULL) return $value;
+		array_unshift($params, $value);
+		return call_user_func_array('sprintf', $params);
+	}
+
+    /**
      * Return the value with given key.
      *
      * @param string $key
