@@ -188,10 +188,10 @@ class I18N {
      * <p>Use with care. Usually it makes no sense to use this function.</p>
      */
     public static function reset() {
-        self::$defaultLangCode  = 'en';
-        self::$fallbackLangCode = 'en';
-        self::$i18nFile         = NULL;
-        self::$i18n             = NULL;
+        self::$defaultLangCode   = 'en';
+        self::$fallbackLangCodes = array('en');
+        self::$i18nFile          = NULL;
+        self::$i18n              = NULL;
     }
     
 }
