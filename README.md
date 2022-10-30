@@ -9,8 +9,8 @@ This project is licensed under [GNU LGPL 3.0](LICENSE.md).
 
 ## By Composer
 
-```
-composer install technicalguru/i18n
+```sh
+composer require technicalguru/i18n
 ```
 
 ## By Package Download
